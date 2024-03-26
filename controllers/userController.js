@@ -59,11 +59,15 @@ const UserController = {
                 return res.status(404).json({ message: 'User not found' });
             }
 
-            const hashedPassword = await hash(req.body.password, 10);
+            let hashedPassword = user.password;
+
+            if (req.body.password) {
+                hashedPassword = await hash(req.body.password, 10);
+            }
 
             user.name = req.body.name || user.name;
             user.email = req.body.email || user.email;
-            user.password = hashedPassword || user.password;
+            user.password = hashedPassword;
             user.phone = req.body.phone || user.phone;
             user.isAdmin = req.body.isAdmin || user.isAdmin;
 
